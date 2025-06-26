@@ -1,0 +1,2 @@
+/home/son/temp_c/4_UsbCryptoBasic/usb_crypto_driver.o
+

@@ -1,0 +1,1 @@
+cmd_/home/son/temp_c/4_UsbCryptoBasic/usb_crypto_driver.ko := ld -r  -m elf_x86_64 -z noexecstack   --build-id=sha1  -T scripts/module.lds -o /home/son/temp_c/4_UsbCryptoBasic/usb_crypto_driver.ko /home/son/temp_c/4_UsbCryptoBasic/usb_crypto_driver.o /home/son/temp_c/4_UsbCryptoBasic/usb_crypto_driver.mod.o;  true
