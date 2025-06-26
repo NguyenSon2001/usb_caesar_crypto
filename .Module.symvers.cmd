@@ -1,1 +1,0 @@
-cmd_/home/son/temp_c/4_UsbCryptoBasic/Module.symvers := sed 's/ko$$/o/' /home/son/temp_c/4_UsbCryptoBasic/modules.order | scripts/mod/modpost -m -a   -o /home/son/temp_c/4_UsbCryptoBasic/Module.symvers -e -i Module.symvers   -T -
