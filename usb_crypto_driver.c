@@ -1,6 +1,5 @@
 /*======================================================================
- *  usb_crypto_vi.c — Driver USB Caesar Cipher (Mã hoá/giải mã) — phiên
- *  bản Tiếng Việt hoá, đổi tên hàm để phản ánh đúng chức năng.
+ * Driver USB Caesar Cipher (Mã hoá/giải mã)
  *---------------------------------------------------------------------
  *  Hướng dẫn nhanh (ghi chú):
  *  - Thiết bị ký tự xuất hiện dưới /dev/usb/cryptoX (X = minor).
@@ -23,7 +22,7 @@
 #include <linux/fs.h>
 #include <linux/uaccess.h>
 
-#define DRIVER_NAME            "usb_crypto_vi"
+#define DRIVER_NAME            "usb_crypto"
 #define DRIVER_VERSION         "0.1"
 #define BUFFER_SIZE            (64 * 1024)   /* bộ đệm tối đa */
 #define CAESAR_DEFAULT_SHIFT   13            /* dịch mặc định */
