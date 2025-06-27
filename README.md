@@ -193,5 +193,3 @@ cat /proc/usb_crypto
 * Tăng tùy chọn cấu hình (key từ USB, IV tự sinh, kiểm tra checksum)
 
 ---
-
-Nếu bạn muốn mình tạo thêm hướng dẫn tiếng Anh hoặc tài liệu chi tiết cho sinh viên, chỉ cần yêu cầu!
