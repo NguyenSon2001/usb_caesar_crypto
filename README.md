@@ -12,14 +12,14 @@ Hệ thống bao gồm:
 
 * **USB Kernel Driver**: Tích hợp thuật toán Caesar Cipher
 * **Ứng dụng người dùng**: Dễ sử dụng qua dòng lệnh
-* **Giao diện `/proc`**: Kết nối giữa ứng dụng và kernel module
+* **Giao diện `/dev`**: Kết nối giữa ứng dụng và kernel module
 
 ## 🏗️ Kiến trúc hệ thống
 
 ```
 [Ứng dụng người dùng] 
         ↓
-[/proc/usb_crypto] 
+[/dev/usb_crypto] 
         ↓
 [USB Crypto Driver] ← [USB Device]
         ↓
