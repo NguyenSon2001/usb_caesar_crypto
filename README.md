@@ -1,14 +1,20 @@
-# USB Crypto Driver - Hệ thống mã hóa/giải mã tệp tin
+Dưới đây là phiên bản đã chỉnh sửa của file README để phù hợp với **thuật toán mã hóa/giải mã Caesar** thay vì AES-256-CBC:
 
-## Tổng quan
+---
 
-Hệ thống USB Crypto Driver là một giải pháp bảo mật cho phép mã hóa và giải mã tệp tin chỉ khi có USB device được kết nối. Hệ thống bao gồm:
+# USB Crypto Driver - Hệ thống mã hóa/giải mã Caesar
 
-- **USB Kernel Driver**: Chứa thuật toán mã hóa AES-256-CBC
-- **Ứng dụng người dùng**: Giao diện để thực hiện mã hóa/giải mã
-- **Proc interface**: Giao tiếp giữa ứng dụng và driver
+## 🛡️ Tổng quan
 
-## Kiến trúc hệ thống
+**USB Crypto Driver** là hệ thống bảo mật đơn giản sử dụng thuật toán **Caesar Cipher** để mã hóa và giải mã tệp tin, chỉ hoạt động khi thiết bị USB hợp lệ được kết nối.
+
+Hệ thống bao gồm:
+
+* **USB Kernel Driver**: Tích hợp thuật toán Caesar Cipher
+* **Ứng dụng người dùng**: Dễ sử dụng qua dòng lệnh
+* **Giao diện `/proc`**: Kết nối giữa ứng dụng và kernel module
+
+## 🏗️ Kiến trúc hệ thống
 
 ```
 [Ứng dụng người dùng] 
@@ -17,232 +23,175 @@ Hệ thống USB Crypto Driver là một giải pháp bảo mật cho phép mã 
         ↓
 [USB Crypto Driver] ← [USB Device]
         ↓
-[AES Encryption/Decryption]
+[Caesar Encryption/Decryption]
 ```
 
-## Tính năng chính
+## ⚙️ Tính năng chính
 
-- ✅ Mã hóa AES-256-CBC với IV ngẫu nhiên
-- ✅ Chỉ hoạt động khi USB device được kết nối
-- ✅ Giao diện dòng lệnh đơn giản
-- ✅ Hỗ trợ tệp tin có kích thước lớn
-- ✅ Tự động phát hiện kết nối/ngắt kết nối USB
-- ✅ Logging và giám sát trạng thái
+* ✅ Mã hóa/giải mã bằng **Caesar Cipher** với độ lệch có thể tùy chỉnh
+* ✅ Chỉ hoạt động khi thiết bị USB được nhận diện
+* ✅ Giao diện dòng lệnh trực quan
+* ✅ Hỗ trợ tệp văn bản kích thước vừa và nhỏ
+* ✅ Tự động phát hiện thiết bị USB
+* ✅ Dễ tích hợp và thử nghiệm cho mục đích giáo dục/bảo mật đơn giản
 
-## Yêu cầu hệ thống
+## 🧰 Yêu cầu hệ thống
 
 ### Phần cứng
-- Máy tính chạy Linux (kernel 4.0+)
-- USB port
-- USB device (flash drive, external drive, etc.)
+
+* Linux OS (kernel 4.0+)
+* Cổng và thiết bị USB
 
 ### Phần mềm
-- Linux kernel headers
-- GCC compiler
-- Make utility
-- Root privileges để load driver
+
+* GCC, Make, Linux kernel headers
+* Quyền root để nạp driver
 
 ### Cài đặt dependencies
 
 **Ubuntu/Debian:**
+
 ```bash
-sudo apt-get update
-sudo apt-get install build-essential linux-headers-$(uname -r)
+sudo apt update
+sudo apt install build-essential linux-headers-$(uname -r)
 ```
 
 **CentOS/RHEL:**
+
 ```bash
 sudo yum groupinstall "Development Tools"
 sudo yum install kernel-devel
 ```
 
-## Cài đặt và sử dụng
+## 🔧 Cài đặt và sử dụng
 
-### 1. Tải và chuẩn bị mã nguồn
+### 1. Chuẩn bị mã nguồn
 
 ```bash
-# Tạo thư mục dự án
-mkdir usb-crypto-driver
-cd usb-crypto-driver
+mkdir usb-caesar-driver
+cd usb-caesar-driver
 
-# Copy các file mã nguồn vào thư mục này:
-# - usb_crypto_driver.c
-# - crypto_app.c  
-# - Makefile
-# - build.sh
+# Copy các file: usb_crypto_driver.c, crypto_app.c, Makefile, build.sh
 ```
 
 ### 2. Build hệ thống
 
 ```bash
-# Cấp quyền thực thi cho script build
 chmod +x build.sh
-
-# Build toàn bộ hệ thống
 sudo ./build.sh build
 ```
 
 ### 3. Load driver
 
 ```bash
-# Load driver vào kernel
 sudo ./build.sh load
 ```
 
 ### 4. Kiểm tra trạng thái
 
 ```bash
-# Kiểm tra trạng thái hệ thống
 sudo ./build.sh status
-
-# Hoặc sử dụng ứng dụng
 ./crypto_app -s
 ```
 
-### 5. Kết nối USB device
+### 5. Kết nối USB
 
-Cắm USB device vào máy tính. Driver sẽ tự động phát hiện và cho phép thực hiện mã hóa/giải mã.
+Cắm thiết bị USB. Driver sẽ kiểm tra và kích hoạt tính năng mã hóa nếu đúng VID/PID.
 
+#### 5.1 Khắc phục lỗi không nhận thiết bị
 
-### 5.1 Fix lỗi không nhận thiết bị
-- Nguyên nhân : Do một driver khác đã chiếm quyền với thiết bị USB ==> Cần hủy liên kết giữa USB với driver đó trước
-- Nếu thiết bị USB là thẻ nhớ thì :
+Tạo file udev rule như sau:
 
 ```bash
-# Mở file config
 sudo gedit /etc/udev/rules.d/99-usb-crypto.rules
 ```
+
+Thêm:
+
 ```bash
-# Thêm nội dung
-ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="05e3", ATTRS{idProduct}=="0747", RUN+="/bin/sh -c 'echo 0 > /sys/bus/usb/devices/%k/driver/unbind; modprobe -r uas usb_storage'"
+ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="xxxx", ATTRS{idProduct}=="yyyy", RUN+="/bin/sh -c 'echo 0 > /sys/bus/usb/devices/%k/driver/unbind; modprobe -r uas usb_storage'"
 ```
-- Nhớ sửa lại idVendor và idProduct
-- Mục đích của nội dung được thêm vào file: Ngăn không cho kernel tự gán driver USB mặc định (như usb_storage hoặc uas) cho thiết bị USB có VID:PID là 05e3:0747.
-###
-### 6. Sử dụng ứng dụng mã hóa
+
+*(Thay `xxxx` và `yyyy` bằng VID/PID tương ứng)*
+
+### 6. Sử dụng ứng dụng mã hóa/giải mã
 
 ```bash
-# Mã hóa tệp tin
-./crypto_app -e input.txt encrypted.dat
+# Mã hóa với Caesar (mặc định shift = 3)
+./crypto_app -e input.txt encrypted.txt
 
-# Giải mã tệp tin  
-./crypto_app -d encrypted.dat decrypted.txt
+# Giải mã
+./crypto_app -d encrypted.txt decrypted.txt
 
-# Xem trạng thái
-./crypto_app -s
+# Mã hóa với shift tùy chọn
+./crypto_app -e -k 5 input.txt encrypted.txt
 
-# Xem help
+# Trợ giúp
 ./crypto_app -h
 ```
 
-## Các lệnh quản lý
+## 🧪 Các lệnh quản lý
 
-### Script build.sh
+### build.sh
 
 ```bash
-# Build mã nguồn
-sudo ./build.sh build
-
-# Load driver
-sudo ./build.sh load
-
-# Unload driver
-sudo ./build.sh unload
-
-# Reload driver
-sudo ./build.sh reload
-
-# Test hệ thống
-sudo ./build.sh test
-
-# Xem trạng thái
-./build.sh status
-
-# Cài đặt vĩnh viễn
-sudo ./build.sh install
-
-# Gỡ cài đặt
-sudo ./build.sh uninstall
-
-# Clean build files
-./build.sh clean
+sudo ./build.sh build     # Biên dịch
+sudo ./build.sh load      # Load driver
+sudo ./build.sh unload    # Gỡ driver
+sudo ./build.sh reload    # Tải lại
+./build.sh status         # Trạng thái
+sudo ./build.sh install   # Cài vĩnh viễn
+sudo ./build.sh uninstall # Gỡ cài đặt
+./build.sh clean          # Dọn file build
 ```
 
-### Quản lý driver thủ công
+### Thủ công
 
 ```bash
-# Load driver
 sudo insmod usb_crypto_driver.ko
-
-# Unload driver
 sudo rmmod usb_crypto_driver
-
-# Xem thông tin driver
 modinfo usb_crypto_driver.ko
-
-# Kiểm tra driver đã load
 lsmod | grep usb_crypto
 ```
 
-## Tùy chỉnh USB Device ID
+## 🔧 Tùy chỉnh thiết bị USB
 
-Mặc định, driver hỗ trợ generic USB storage devices. Để chỉ định USB device cụ thể:
-
-1. Xem thông tin USB device:
 ```bash
-lsusb
-# Tìm Vendor ID và Product ID
+lsusb  # Lấy VID và PID
 ```
 
-2. Sửa file `usb_crypto_driver.c`:
+Sửa file `usb_crypto_driver.c`:
+
 ```c
-static struct usb_device_id usb_crypto_table[] = {
-    { USB_DEVICE(0x1234, 0x5678) }, // Thay bằng VID/PID của bạn
-    {}
-};
+{ USB_DEVICE(0xABCD, 0x1234) },
 ```
 
-3. Rebuild và reload driver:
+Sau đó:
+
 ```bash
 sudo ./build.sh reload
 ```
 
-## Kiểm tra và Debug
-
-### Xem log của driver
+## 🔍 Debug & Logging
 
 ```bash
-# Xem kernel messages
 dmesg | tail -20
-
-# Theo dõi real-time
 sudo tail -f /var/log/kern.log | grep usb_crypto
-```
-
-### Kiểm tra proc interface
-
-```bash
-# Xem trạng thái driver
 cat /proc/usb_crypto
-
-# Test gửi lệnh (chỉ dành cho debug)
-echo "E:test data" | sudo tee /proc/usb_crypto
 ```
 
-### Kiểm tra USB devices
+## 🔐 Bảo mật và giới hạn
 
-```bash
-# Liệt kê USB devices
-lsusb
+* **Caesar Cipher** chỉ phù hợp cho mục đích giáo dục, kiểm thử hoặc hệ thống đơn giản.
+* **Không nên sử dụng trong môi trường yêu cầu bảo mật nghiêm ngặt.**
 
-# Xem chi tiết USB device
-lsusb -v -d [vendor_id]:[product_id]
+---
 
-# Giám sát USB events
-sudo udevadm monitor --udev
-```
+✅ **Gợi ý mở rộng**:
 
-## Bảo mật
+* Nâng cấp thuật toán (Vigenère, XOR, AES...)
+* Tăng tùy chọn cấu hình (key từ USB, IV tự sinh, kiểm tra checksum)
 
-### Key Management
-- Hiện tại key
+---
+
+Nếu bạn muốn mình tạo thêm hướng dẫn tiếng Anh hoặc tài liệu chi tiết cho sinh viên, chỉ cần yêu cầu!
